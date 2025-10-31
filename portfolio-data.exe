@@ -1,0 +1,180 @@
+// Portfolio Data Management System
+// Auto-generated from résumé content (Davayonn Tyler)
+// Uses localStorage for data persistence
+
+const DEFAULT_DATA = {
+    "name": "Davayonn Tyler",
+    "title": "Mechanical Engineer \u2022 Aerostat Operator (Electro\u2011Mechanical Technician)",
+    "about": "Versatile mechanical engineer with strong decision\u2011making, critical thinking, and communication skills. Methodical, hands\u2011on professional with experience designing power\u2011producing machines and operating/maintaining aerostat ISR systems.",
+    "summary": "Reliable leader with experience in aerostat operations (launch, in\u2011flight, recovery, moored), repair and pressure testing, inventory control, and cross\u2011functional collaboration with U.S. Army teams. Skilled in troubleshooting complex mechanical systems, precision engineering, and documentation.",
+    "heroBackgrounds": [],
+    "contact": {
+        "email": "davayonntyler@gmail.com",
+        "phone": "804\u2011721\u20110184",
+        "linkedin": "https://www.linkedin.com/in/davayonn-t-514538101"
+    },
+    "education": {
+        "school": "Virginia State University",
+        "degree": "Bachelor of Science in Mechanical Engineering",
+        "graduationDate": "December 2022",
+        "location": "Petersburg, VA"
+    },
+    "experiences": [
+        {
+            "company": "TCOM",
+            "role": "Aerostat Operator \u2022 Electro\u2011Mechanical Technician",
+            "dates": "Sep 2023 \u2013 Present",
+            "location": "Elizabeth City, NC / Iraq / Syria",
+            "clearance": false,
+            "responsibilities": [
+                "Monitor aerostat altitude, speed, and direction; communicate with ground control and other aircraft.",
+                "Perform regular maintenance, repairs, and pressure testing on the aerostat system.",
+                "Manage inventory to ensure critical components are available for operations; support checkout team tasks.",
+                "Execute full lifecycle operations: launch, in\u2011flight, recovery, and moored activities for ISR payloads.",
+                "Operate Mooring Platform (MMP), payload sensors, boom lift, forklift, ATVs, and power generators.",
+                "Collaborate with U.S. Army on communications and navigation system operations."
+            ]
+        },
+        {
+            "company": "TCOM",
+            "role": "Field Service Mechanical Engineer",
+            "dates": "Jan 2023 \u2013 May 2023",
+            "location": "Elizabeth City, NC",
+            "clearance": false,
+            "responsibilities": [
+                "Calibrated and installed aerostat systems; verified mooring and telemetry performance/safety.",
+                "Analyzed flight patterns and behaviors; documented test results for engineering teams.",
+                "Contributed conceptual design solutions and cross\u2011functional troubleshooting for complex mechanical systems."
+            ]
+        },
+        {
+            "company": "Virginia State University",
+            "role": "Senior Project Team Lead",
+            "dates": "Aug 2021 \u2013 May 2022",
+            "location": "Petersburg, VA",
+            "clearance": false,
+            "responsibilities": [
+                "Coordinated with the Department of Engineering to present findings and design concepts.",
+                "Led cross\u2011functional collaboration; planned and solved project challenges to meet deadlines.",
+                "Directed inclusion/diversity efforts for communicating internal opportunities.",
+                "Researched and developed an innovative solar\u2011powered bicycle project."
+            ]
+        },
+        {
+            "company": "Porvair Filtration Group",
+            "role": "Design Engineer",
+            "dates": "Aug 2021 \u2013 Jan 2022",
+            "location": "Ashland, VA",
+            "clearance": false,
+            "responsibilities": [
+                "Updated aerospace filter systems using AutoCAD within strict tolerances; revised technical drawings.",
+                "Troubleshot design issues to improve clarity, manufacturability, and compliance with standards."
+            ]
+        },
+        {
+            "company": "Dominion Energy",
+            "role": "System Protection Engineer Intern",
+            "dates": "Jul 2021 \u2013 Aug 2021",
+            "location": "Dinwiddie, VA",
+            "clearance": false,
+            "responsibilities": [
+                "Coordinated with international suppliers and local engineers for transformer installation/commissioning.",
+                "Performed condition monitoring (oil particle & infrared analysis); interpreted transformer test results.",
+                "Identified and rectified electrical faults; updated/maintained system records for site leadership."
+            ]
+        }
+    ],
+    "projects": [],
+    "skills": [
+        {
+            "category": "Core & Technical Skills",
+            "icon": "\u2699\ufe0f",
+            "skills": [
+                {
+                    "name": "Aerostat Operations & Maintenance",
+                    "description": "Launch/recovery/moored ops for ISR aerostats; pressure testing, repairs, inventory control, and safety procedures."
+                },
+                {
+                    "name": "Mechanical & Precision Engineering",
+                    "description": "Hydraulic/pneumatic design, aerospace filtration systems, technical drawings, tolerance analysis, and quality control."
+                },
+                {
+                    "name": "Diagnostics & Troubleshooting",
+                    "description": "Root\u2011cause analysis for complex electro\u2011mechanical systems; documentation and reporting of verification results."
+                },
+                {
+                    "name": "Software & Tools",
+                    "description": "MATLAB, AutoCAD; highly skilled in 2D/3D CAD; familiarity with manufacturing processes and fluid mechanics."
+                },
+                {
+                    "name": "Field Equipment",
+                    "description": "Operation of boom lift, forklift, ATVs, and electrical power generators in field environments."
+                }
+            ]
+        }
+    ]
+};
+
+// Get portfolio data from localStorage or return default
+function getPortfolioData() {
+    const stored = localStorage.getItem('portfolioData');
+    if (stored) {
+        try {
+            return JSON.parse(stored);
+        } catch (e) {
+            console.error('Error parsing stored data:', e);
+            return DEFAULT_DATA;
+        }
+    }
+    return DEFAULT_DATA;
+}
+
+// Save portfolio data to localStorage
+function savePortfolioData(data) {
+    try {
+        localStorage.setItem('portfolioData', JSON.stringify(data));
+        return true;
+    } catch (e) {
+        console.error('Error saving data:', e);
+        return false;
+    }
+}
+
+// Reset to default data
+function resetPortfolioData() {
+    localStorage.setItem('portfolioData', JSON.stringify(DEFAULT_DATA));
+    return DEFAULT_DATA;
+}
+
+// Export data as JSON file
+function exportPortfolioData() {
+    const data = getPortfolioData();
+    const dataStr = JSON.stringify(data, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'portfolio-data-export.json';
+    link.click();
+    URL.revokeObjectURL(url);
+}
+
+// Import data from JSON file
+function importPortfolioData(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const data = JSON.parse(e.target.result);
+                savePortfolioData(data);
+                resolve(data);
+            } catch (error) {
+                reject(error);
+            }
+        };
+        reader.onerror = reject;
+        reader.readAsText(file);
+    });
+}
+
+export { getPortfolioData, savePortfolioData, resetPortfolioData, exportPortfolioData, importPortfolioData };
