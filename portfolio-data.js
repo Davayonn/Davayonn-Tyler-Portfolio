@@ -176,5 +176,3 @@ function importPortfolioData(file) {
         reader.readAsText(file);
     });
 }
-
-export { getPortfolioData, savePortfolioData, resetPortfolioData, exportPortfolioData, importPortfolioData };
