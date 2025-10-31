@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Resume Demo — Davayonn Tyler</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #111827;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --primary: #06b6d4;
+    }
+    html, body { margin:0; padding:0; background: var(--bg); color: var(--text); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji"; }
+    .wrap { max-width: 900px; margin: 3rem auto; padding: 0 1rem; }
+    .card { background: linear-gradient(180deg, #111827 0%, #0b1220 100%); border: 1px solid #1f2937; border-radius: 16px; padding: 1.5rem 1.75rem; margin-bottom: 1rem; box-shadow: 0 10px 30px rgba(0,0,0,.3); }
+    h1 { font-size: 2rem; margin: 0 0 .5rem; }
+    h2 { font-size: 1.35rem; color: var(--primary); margin: 1.25rem 0 .75rem; }
+    h3 { font-size: 1.1rem; margin: .5rem 0; }
+    .muted { color: var(--muted); }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    ul { margin: .5rem 0 0 1.25rem; line-height: 1.6; }
+    a { color: #67e8f9; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .pill { display: inline-block; padding: .25rem .6rem; background: #0b2540; border: 1px solid #163a5f; border-radius: 999px; margin: .2rem .4rem .2rem 0; font-size: .85rem; color: #cdeafe; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1 id="name"></h1>
+      <div class="muted" id="title"></div>
+      <div id="contact" class="muted" style="margin-top: .5rem;"></div>
+    </div>
+
+    <div class="card">
+      <h2>About</h2>
+      <p id="about"></p>
+      <h2>Summary</h2>
+      <p id="summary"></p>
+    </div>
+
+    <div class="card">
+      <h2>Experience</h2>
+      <div id="experience"></div>
+    </div>
+
+    <div class="card">
+      <h2>Education</h2>
+      <div id="education"></div>
+    </div>
+
+    <div class="card">
+      <h2>Skills</h2>
+      <div id="skills"></div>
+    </div>
+  </div>
+
+  <script type="module">
+    import {{ getPortfolioData }} from './portfolio-data.js';
+    const data = getPortfolioData();
+
+    document.getElementById('name').textContent = data.name;
+    document.getElementById('title').textContent = data.title;
+    document.getElementById('contact').innerHTML =
+      `<a href="mailto:${{data.contact.email}}">${{data.contact.email}}</a> · ` +
+      `<a href="tel:${{data.contact.phone}}">${{data.contact.phone}}</a> · ` +
+      `<a href="${{data.contact.linkedin}}" target="_blank">LinkedIn</a>`;
+
+    document.getElementById('about').textContent = data.about;
+    document.getElementById('summary').textContent = data.summary;
+
+    const edu = data.education;
+    document.getElementById('education').innerHTML = `
+      <div><strong>${{edu.school}}</strong> — ${{edu.degree}}<br/>
+      <span class="muted">${{edu.location}} • ${{edu.graduationDate}}</span></div>
+    `;
+
+    const expRoot = document.getElementById('experience');
+    data.experiences.forEach((e) => {{
+      const el = document.createElement('div');
+      el.style.marginBottom = '1rem';
+      el.innerHTML = `
+        <h3>${{e.role}} — <span class="muted">${{e.company}}</span></h3>
+        <div class="muted">${{e.location}} • ${{e.dates}}</div>
+        <ul>${{e.responsibilities.map(r => `<li>${{r}}</li>`).join('')}}</ul>
+      `;
+      expRoot.appendChild(el);
+    }});
+
+    const skillsRoot = document.getElementById('skills');
+    data.skills.forEach((group) => {{
+      const g = document.createElement('div');
+      g.innerHTML = `<h3>${{group.icon}} ${{group.category}}</h3>`;
+      const pills = document.createElement('div');
+      group.skills.forEach((s) => {{
+        const pill = document.createElement('div');
+        pill.className = 'pill';
+        pill.textContent = s.name;
+        pills.appendChild(pill);
+        const p = document.createElement('p');
+        p.className = 'muted';
+        p.textContent = s.description;
+        g.appendChild(pill);
+        g.appendChild(p);
+      }});
+      skillsRoot.appendChild(g);
+    }});
+  </script>
+</body>
+</html>
